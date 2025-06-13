@@ -13,7 +13,12 @@ export function activate(context: vscode.ExtensionContext) {
     let statusBarShowed = false;
     statusBarItem.text = "$(music) $(loading~spin)";
     statusBarItem.tooltip = "歌词 · 正在初始化";
+    statusBarItem.command = "lyricsIslandIndicator.openSettings";
     statusBarItem.show();
+
+    let commandDisposable = vscode.commands.registerCommand('lyricsIslandIndicator.openSettings', () => {
+        vscode.commands.executeCommand('workbench.action.openSettings', 'lyricsIslandIndicator');
+    });
 
     const app = express();
     const port = config.get<number>("port");
@@ -62,9 +67,7 @@ export function activate(context: vscode.ExtensionContext) {
         });
         }
     });
-    
-    
-    // 关闭服务器时清理
+    context.subscriptions.push(commandDisposable);
 }
 
 // This method is called when your extension is deactivated

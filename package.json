@@ -33,7 +33,13 @@
           "description": "启用后，将在主歌词的右侧显示副歌词。"
         }
       }
-    }
+    },
+    "commands": [
+      {
+        "command": "lyricsIslandIndicator.openSettings",
+        "title": "打开 LyricsIsland Indicator 设置"
+      }
+    ]
   },
   "scripts": {
     "vscode:prepublish": "pnpm run compile",
