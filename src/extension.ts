@@ -11,8 +11,9 @@ export function activate(context: vscode.ExtensionContext) {
 
     const statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 100);
     let statusBarShowed = false;
-    statusBarItem.text = "$(music) …";
-    statusBarItem.tooltip = "歌词";
+    statusBarItem.text = "$(music) $(loading~spin)";
+    statusBarItem.tooltip = "歌词 · 正在初始化";
+    statusBarItem.show();
 
     const app = express();
     const port = config.get<number>("port");
@@ -30,6 +31,7 @@ export function activate(context: vscode.ExtensionContext) {
         }
 
         statusBarItem.text = text;
+        statusBarItem.tooltip = `${data.lyric}\n${data.extra}`;
         if (!statusBarShowed) {
             statusBarItem.show();
         }
@@ -38,23 +40,29 @@ export function activate(context: vscode.ExtensionContext) {
     });
 
     const server = http.createServer(app);
-    try {
-        // 启动服务器
-        server.listen(port, () => {
-            console.log(`开始监听歌词请求：http://localhost:${port}/webhook`);
-            // vscode.window.showInformationMessage(`监听端口 ${port} 成功`);
+    // 启动服务器
+    server.listen(port, () => {
+        console.log(`开始监听歌词请求：http://localhost:${port}/webhook`);
+        // vscode.window.showInformationMessage(`监听端口 ${port} 成功`);
+    });
+    server.on('error', (err: NodeJS.ErrnoException) => {
+        console.error(`无法在 URL 上监听端口：http://localhost:${port}/webhook`, err);
+        statusBarItem.text = "$(music) :(";
+        statusBarItem.tooltip = `无法加载 LyricsIsland：${err.message}`;
+    });
+    server.on('listening' ,() => {
+        statusBarItem.hide();
+        statusBarItem.tooltip = "歌词";
+    });
+    
+    context.subscriptions.push({
+        dispose() {
+        server.close(() => {
+            console.log('服务器已关闭');
         });
-        
-        context.subscriptions.push({
-            dispose() {
-            server.close(() => {
-                console.log('服务器已关闭');
-            });
-            }
-        });
-    } catch (error: any) {
-        console.error(`无法在 URL 上监听端口：http://localhost:${port}/webhook`);
-    }
+        }
+    });
+    
     
     // 关闭服务器时清理
 }
