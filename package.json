@@ -41,18 +41,23 @@
     "watch": "tsc -watch -p ./",
     "pretest": "pnpm run compile && pnpm run lint",
     "lint": "eslint src",
-    "test": "vscode-test"
+    "test": "vscode-test",
+    "package": "pnpm vsce package --no-dependencies",
+    "publish": "pnpm vsce publish --no-dependencies",
+    "esbuild-base": "esbuild ./src/extension.ts --bundle --outfile=out/main.js --external:vscode --format=cjs --platform=node"
   },
   "devDependencies": {
     "@types/express": "^5.0.3",
     "@types/mocha": "^10.0.10",
-    "@types/node": "20.x",
+    "@types/node": "~20.19.0",
     "@types/vscode": "^1.101.0",
-    "@typescript-eslint/eslint-plugin": "^8.31.1",
-    "@typescript-eslint/parser": "^8.31.1",
+    "@typescript-eslint/eslint-plugin": "^8.34.0",
+    "@typescript-eslint/parser": "^8.34.0",
     "@vscode/test-cli": "^0.0.10",
     "@vscode/test-electron": "^2.5.2",
-    "eslint": "^9.25.1",
+    "@vscode/vsce": "^3.5.0",
+    "eslint": "^9.28.0",
+    "minimatch": "10.0.3",
     "typescript": "^5.8.3"
   },
   "dependencies": {
