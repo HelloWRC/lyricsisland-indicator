@@ -1,0 +1,61 @@
+{
+  "name": "lyricsisland-indicator",
+  "displayName": "LyricsIsland Indicator",
+  "description": "Display lyrics from music players using LyricsIsland protocol on your status bar.",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.101.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "configuration": {
+      "title": "LyricsIsland Indicator",
+      "type": "object",
+      "properties": {
+        "lyricsIslandIndicator.port": {
+          "title": "侦听端口",
+          "type": "number",
+          "default": 50063,
+          "description": "LyricsIsland 协议侦听端口，用于接收歌词信息。",
+          "minimum": 1,
+          "maximum": 65535
+        },
+        "lyricsIslandIndicator.showExtraLyrics": {
+          "title": "显示副歌词",
+          "type": "boolean",
+          "default": false,
+          "description": "启用后，将在主歌词的右侧显示副歌词。"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "pnpm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "pnpm run compile && pnpm run lint",
+    "lint": "eslint src",
+    "test": "vscode-test"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.3",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "20.x",
+    "@types/vscode": "^1.101.0",
+    "@typescript-eslint/eslint-plugin": "^8.31.1",
+    "@typescript-eslint/parser": "^8.31.1",
+    "@vscode/test-cli": "^0.0.10",
+    "@vscode/test-electron": "^2.5.2",
+    "eslint": "^9.25.1",
+    "typescript": "^5.8.3"
+  },
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}
